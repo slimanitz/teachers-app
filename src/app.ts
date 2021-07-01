@@ -1,22 +1,31 @@
-import  * as express from 'express';
-import { sequelize } from './database';
+import * as express from "express";
+import { DbContext } from "./database/db-context";
+import * as bodyParser from "body-parser";
+import { InversifyExpressServer } from "inversify-express-utils";
+import * as cors from "cors";
+import "./controllers";
+import container from "./infrastructure/container";
+var morgan = require("morgan");
 
+const db = new DbContext();
 
+let server = new InversifyExpressServer(container);
+server.setConfig(async (app) => {
+  // Add in the application/x-www-form-urlencoded parser.
+  app.use(bodyParser.urlencoded({ extended: true }));
 
-const app = express()
+  // Add in the application/json parser.
+  app.use(bodyParser.json());
 
+  // Enables CORS.
+  app.use(cors({ origin: true, credentials: true }));
+  var logger = morgan("combined");
+  app.use(logger);
+});
 
+let app = server.build();
 
-app.listen(8080,()=>{
-    console.log('The app is running at localhost:8080')
-    sequelize.authenticate().then(async ()=>{
-        console.log('database connected')
-        try{
-            await sequelize.sync({force:true})
-            console.log('sync success')
-
-        }catch(error){
-            console.log(error.message)
-        }
-    }).catch((err)=>console.log(err.message))
-})
+app.listen(3000, async () => {
+  await db.sync({ force: false });
+  console.log("The app is running at localhost:3000 at date");
+});
