@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import LoginPage from "./pages/login/login-page";
+import SignUpPage from "./pages/sign-up/sign-up-page";
+import HomePage from "./pages/home/home-page";
+import ProtectedRoute from "./components/protected-route";
+import Unauthorized from "./pages/unauthorized/unauthorized";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+        <Route path="/signup">
+          <SignUpPage />
+        </Route>
+        <Route exact path="/">
+          <HomePage />
+        </Route>
+        {/* <Route path="*">
+          For 404 page
+          <NoMatch />
+        </Route> */}
+        {/* <ProtectedRoute
+          exact
+          path="/dashboard"
+          handleLogout={handleLogout}
+          component={Dashboard}
+        /> */}
+        <Route exact path="/unauthorized" component={Unauthorized} />
+      </Switch>
+    </Router>
   );
 }
+
+isAuthenticated = async () => {
+  return await fetch(`<your domain>/isAuth`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+};
 
 export default App;

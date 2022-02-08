@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType } from "sequelize-typescript";
-import { Role } from "../../models/user/role";
-import { User } from "../../models/user/user";
+import { Role } from "../../types/user/role";
+import { User } from "../../types/user/user";
 
 @Table({
   schema: "account",
@@ -40,10 +40,17 @@ export default class DbUser extends Model<User> {
   @Column({
     field: "email",
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     unique: true,
   })
   public email: string;
+
+  @Column({
+    field: "password",
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  public password: string;
 
   @Column({
     field: "role",

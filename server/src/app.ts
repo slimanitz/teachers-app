@@ -5,11 +5,17 @@ import { InversifyExpressServer } from "inversify-express-utils";
 import * as cors from "cors";
 import "./controllers";
 import container from "./infrastructure/container";
+import "dotenv/config";
+
+console.log(process.env.NODE_ENV);
+
 var morgan = require("morgan");
 
 const db = new DbContext();
 
-let server = new InversifyExpressServer(container);
+let server = new InversifyExpressServer(container, null, {
+  rootPath: "/api/v1",
+});
 server.setConfig(async (app) => {
   // Add in the application/x-www-form-urlencoded parser.
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,6 +32,6 @@ server.setConfig(async (app) => {
 let app = server.build();
 
 app.listen(3000, async () => {
-  await db.sync({ force: false });
+  await db.sync({ force: process.env.NODE_ENV === "dev" });
   console.log("The app is running at localhost:3000 at date");
 });

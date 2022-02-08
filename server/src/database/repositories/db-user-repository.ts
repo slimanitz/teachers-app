@@ -7,7 +7,7 @@ import DbUser from "src/persistence/models/account/db-user";*/
 
 import { DbContext } from "../db-context";
 import { injectable } from "inversify";
-import { User } from "../../models/user/user";
+import { User } from "../../types/user/user";
 @injectable()
 export default class DbUserRepository implements DbUserRepository {
   #db: DbContext = new DbContext();
@@ -35,6 +35,10 @@ export default class DbUserRepository implements DbUserRepository {
       },
       returning: true,
     });
+  }
+
+  async getUserByEmail(email: string) {
+    return await this.#db.User.findOne({ where: { email: email } });
   }
 
   async remove(userId: string): Promise<boolean> {
