@@ -23,24 +23,19 @@ function App() {
           For 404 page
           <NoMatch />
         </Route> */}
-        {/* <ProtectedRoute
-          exact
-          path="/dashboard"
-          handleLogout={handleLogout}
-          component={Dashboard}
-        /> */}
+
         <Route exact path="/unauthorized" component={Unauthorized} />
       </Switch>
     </Router>
   );
 }
 
-isAuthenticated = async () => {
-  return await fetch(`<your domain>/isAuth`, {
-    method: "GET",
-  })
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
-};
+// isAuthenticated = async () => {
+//   return await fetch(`<your domain>/isAuth`, {
+//     method: "GET",
+//   })
+//     .then((response) => response.json())
+//     .catch((err) => console.log(err));
+// };
 
 export default App;
