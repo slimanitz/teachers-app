@@ -13,11 +13,12 @@ export default class UserService {
     this.#dbUserRepository = DbUserRepository;
   }
 
-  async register(user: User): Promise<User> {
+  async register(user: User): Promise<string> {
     if (await this.checkIfUserExists(user.email)) {
       throw new Error("User already exists");
     }
     user.password = await this.cryptPassword(user.password);
+    console.log("here serv");
     const newUser = await this.#dbUserRepository.create(user);
     return this.generateAuthToken(newUser);
   }
@@ -47,7 +48,9 @@ export default class UserService {
 
   async cryptPassword(password: string) {
     // The bcrypt is used for encrypting password.
-    return await bcrypt.hash(password, process.env.SALT);
+    const newPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
+    console.log(newPassword);
+    return newPassword;
   }
 
   async comparePassword(password: string, hash: string) {
@@ -55,10 +58,3 @@ export default class UserService {
     return isMatching;
   }
 }
-
-// const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET)
-// const cookie = req.cookies.token;
-// if (cookie == undefined){
-// res.cookie(‘token’, token, {httpOnly: true});
-// }
-// return res.status(200).json({message:”login success”});

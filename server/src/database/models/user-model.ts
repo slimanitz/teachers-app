@@ -5,7 +5,7 @@ import { User } from "../../types/user/user";
 @Table({
   schema: "account",
   tableName: "user",
-  timestamps: false,
+  timestamps: true,
 })
 export default class DbUser extends Model<User> {
   @Column({
@@ -56,6 +56,7 @@ export default class DbUser extends Model<User> {
     field: "role",
     type: DataType.ENUM("Admin", "Client"),
     allowNull: false,
+    defaultValue: Role.Client,
   })
   public role?: Role;
 }

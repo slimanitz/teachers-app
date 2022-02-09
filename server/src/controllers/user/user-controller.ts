@@ -6,6 +6,7 @@ import {
   response,
   requestParam,
   requestBody,
+  request,
 } from "inversify-express-utils";
 import { inject } from "inversify";
 import * as express from "express";
@@ -13,7 +14,7 @@ import * as express from "express";
 import UserService from "../../services/user/user-service";
 
 @controller("/user")
-export class BoxSellController implements interfaces.Controller {
+export class UserController implements interfaces.Controller {
   #UserService: UserService;
   constructor(@inject("UserService") private userService: UserService) {
     this.#UserService = userService;
@@ -29,13 +30,23 @@ export class BoxSellController implements interfaces.Controller {
   // }
 
   @httpPost("/register")
-  public async register(@requestBody() body: any, @response() res: any) {
+  public async register(
+    @request() req: any,
+    @requestBody() body: any,
+    @response() res: any
+  ) {
     try {
-      const newUser = await this.#UserService.register(body.user);
+      console.log("here");
+      const token = await this.#UserService.register(body);
+      console.log("here");
 
-      res.status(200).json(newUser);
+      console.log("here");
+
+      res.cookie("token", token, { httpOnly: true });
+
+      return res.status(200).json({ message: "register success" });
     } catch (error) {
-      res.status(500).json(error);
+      res.status(500).json({ message: "Error while registering" });
     }
   }
 
