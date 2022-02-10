@@ -4,4 +4,11 @@
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+
+  border: 2px lightblue solid;
+  border-radius: 10px;
+}
+
+input.form-control {
+  font-size: 20px;
 }
