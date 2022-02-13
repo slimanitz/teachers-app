@@ -21,5 +21,5 @@ export class UserCreationRequest {
 
   @Validator.IsNotEmpty()
   @Validator.IsDate()
-  public birthDate: string;
+  public birthDate: Date;
 }

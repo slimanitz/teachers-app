@@ -3,17 +3,19 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import LoginPage from "./pages/login/login-page";
 import SignUpPage from "./pages/sign-up/sign-up-page";
 import HomePage from "./pages/home/home-page";
-import ProtectedRoute from "./components/protected-route";
 import Unauthorized from "./pages/unauthorized/unauthorized";
+import axios from "axios";
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:5000/api/v1";
+  axios.defaults.withCredentials = true;
   return (
     <Router>
       <Switch>
         <Route path="/login">
           <LoginPage />
         </Route>
-        <Route path="/signup">
+        <Route path="/register">
           <SignUpPage />
         </Route>
         <Route exact path="/">

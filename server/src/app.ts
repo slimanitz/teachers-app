@@ -6,7 +6,7 @@ import * as cors from "cors";
 import "./controllers";
 import container from "./infrastructure/container";
 import "dotenv/config";
-
+const cookieParser = require("cookie-parser");
 console.log(process.env.NODE_ENV);
 
 var morgan = require("morgan");
@@ -22,6 +22,7 @@ server.setConfig(async (app) => {
 
   // Add in the application/json parser.
   app.use(bodyParser.json());
+  app.use(cookieParser());
 
   // Enables CORS.
   app.use(cors({ origin: true, credentials: true }));
@@ -31,7 +32,7 @@ server.setConfig(async (app) => {
 
 let app = server.build();
 
-app.listen(3000, async () => {
+app.listen(5000, async () => {
   await db.sync({ force: process.env.NODE_ENV === "dev" });
   console.log("The app is running at localhost:3000 at date");
 });

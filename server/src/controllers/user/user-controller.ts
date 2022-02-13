@@ -7,6 +7,7 @@ import {
   requestParam,
   requestBody,
   request,
+  requestHeaders,
 } from "inversify-express-utils";
 import { inject } from "inversify";
 import * as express from "express";
@@ -36,11 +37,8 @@ export class UserController implements interfaces.Controller {
     @response() res: any
   ) {
     try {
-      console.log("here");
+      console.log(body);
       const token = await this.#UserService.register(body);
-      console.log("here");
-
-      console.log("here");
 
       res.cookie("token", token, { httpOnly: true });
 
@@ -48,6 +46,14 @@ export class UserController implements interfaces.Controller {
     } catch (error) {
       res.status(500).json({ message: "Error while registering" });
     }
+  }
+
+  @httpGet("/isAuthorized")
+  public async isAuthorized(
+    @request() req: any,
+    @response() res: express.Response
+  ) {
+    console.log("The fookin cookie", req.cookies.token);
   }
 
   @httpGet("/")
